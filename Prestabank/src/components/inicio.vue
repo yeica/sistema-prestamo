@@ -1,28 +1,10 @@
 <template>
   <section>
     <section>
-      <header class="header">
-        <nav>
-          <a href="/signup">Sign Up</a>
-          <a href="/login">Login</a>
-        </nav>
-        <section class="textos-header"></section>
-        <div class="wave" style="height: 150px; overflow: hidden;">
-          <svg
-            viewBox="0 0 500 150"
-            preserveAspectRatio="none"
-            style="height: 100%; width: 100%;"
-          >
-            <path
-              d="M0.00,49.98 C150.00,150.00 349.20,-50.00 500.00,49.98 L500.00,150.00 L0.00,150.00 Z"
-              style="stroke: none; fill: #fff;"
-            ></path>
-          </svg>
-        </div>
-      </header>
+      <my-header></my-header>
       <main>
         <section class="contenedor sobre-nosotros">
-          <h2 class="titulo">Acerca de nosotros</h2>
+          <h2 class="titulo" id="about">Acerca de nosotros</h2>
           <div class="contenedor-sobre-nosotros">
             <img
               src="../assets/img/ilustracion2.svg"
@@ -69,7 +51,7 @@
         </section>
         <section class="about-services">
           <div class="contenedor">
-            <h2 class="titulo">Nuestros servicios</h2>
+            <h2 class="titulo" id="servicios">Nuestros servicios</h2>
             <div class="servicio-cont">
               <div class="servicio-ind">
                 <img
@@ -97,7 +79,6 @@
                   país o en el extranjero.
                 </p>
                 <br />
-                <b-button rounded>Solicitar prestamo</b-button>
               </div>
               <div class="servicio-ind">
                 <img
@@ -113,57 +94,15 @@
                 </p>
               </div>
             </div>
+              <b-button rounded @click="redirectToPage">Más información</b-button>
           </div>
         </section>
         <br />
         <br />
-        <section class="clientes contenedor">
-          <h2 class="titulo">Tecnologias</h2>
-          <div class="cards">
-            <div class="card">
-              <img
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSiKXtSb3SivBJ6CPkmQVGa2mh12-4hD1eFM2ky00jXaPS-ep3LEFRUFAkwAh81t-PNIgc&usqp=CAU"
-                alt=""
-              />
-              <div class="contenido-texto-card">
-                <h4>Vue</h4>
-                <p>
-                  Utilizamos vue como framework para visualizar nuestra pagina
-                  donde visualizan nuestras diferentes paginas.
-                </p>
-              </div>
-            </div>
-            <div class="card">
-              <img src="https://aspnetcoremaster.com/img/csharp.webp" alt="" />
-              <div class="contenido-texto-card">
-                <h4>C#</h4>
-                <p>
-                  Utilizamos C# para la creacion de nuestra API la que se
-                  encarga de dar funcionalidad a nuestro plataforma.
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
       </main>
       <br />
       <br />
-      <footer>
-        <div class="contenedor-footer">
-          <div class="content-foo">
-            <h4>Phone</h4>
-            <p>8296312</p>
-          </div>
-          <div class="content-foo">
-            <h4>Email</h4>
-            <p>8296312</p>
-          </div>
-          <div class="content-foo">
-            <h4>Location</h4>
-            <p>8296312</p>
-          </div>
-        </div>
-      </footer>
+      <my-footer></my-footer>
     </section>
   </section>
 </template>
@@ -171,17 +110,33 @@
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import Menu from "./menu.vue";
+import Footer from "./footer.vue";
+import Header from "./header.vue";
+import VueRouter from 'vue-router'
+
+declare module 'vue/types/vue' {
+  interface Vue {
+    $router: VueRouter
+  }
+}
 
 @Component({
-  name: "AnotherComponent",
   components: {
     Menu,
+    'my-header': Header,
+    'my-footer': Footer
   },
+  methods: {
+    redirectToPage(){
+      this.$router.push({name: "InfoPrestamos"});
+    }
+  }
 })
+
 export default class Inicio extends Vue {}
+
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
 .contenedor {
   width: 90%;
@@ -198,65 +153,6 @@ export default class Inicio extends Vue {}
   font-size: 30px;
   text-align: center;
   margin-bottom: 60px;
-}
-
-/* Header */
-
-header {
-  width: 100%;
-  height: 600px;
-  background: #bc4e9c;
-  /* fallback for old browsers */
-  background: url(../assets/img/fondo-logo-difuminacion.png);
-  /* Chrome 10-25, Safari 5.1-6 */
-  background: url(../assets/img/fondo-logo-difuminacion.png);
-  /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-  background-size: cover;
-  background-attachment: fixed;
-  position: relative;
-}
-
-nav {
-  text-align: right;
-  padding: 30px 50px 0 0;
-}
-
-nav > a {
-  color: #fff;
-  font-weight: 300;
-  text-decoration: none;
-  margin-right: 10px;
-}
-
-nav > a:hover {
-  text-decoration: underline;
-}
-
-header .textos-header {
-  display: flex;
-  height: 430px;
-  width: 100%;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  text-align: center;
-}
-
-.textos-header h1 {
-  font-size: 50px;
-  color: #fff;
-}
-
-.textos-header h2 {
-  font-size: 30px;
-  font-weight: 300;
-  color: #fff;
-}
-
-.wave {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
 }
 
 /* About us */
@@ -424,43 +320,6 @@ main .sobre-nosotros {
 
 /* footer */
 
-footer {
-  background: #414141;
-  padding: 60px 0 30px 0;
-  margin: auto;
-  overflow: hidden;
-}
-
-.contenedor-footer {
-  display: flex;
-  width: 90%;
-  justify-content: space-evenly;
-  margin: auto;
-  padding-bottom: 50px;
-  border-bottom: 1px solid #ccc;
-}
-
-.content-foo {
-  text-align: center;
-}
-
-.content-foo h4 {
-  color: #fff;
-  border-bottom: 3px solid #af20d3;
-  padding-bottom: 5px;
-  margin-bottom: 10px;
-}
-
-.content-foo p {
-  color: #ccc;
-}
-
-.titulo-final {
-  text-align: center;
-  font-size: 24px;
-  margin: 20px 0 0 0;
-  color: #9e9797;
-}
 
 @media screen and (max-width: 900px) {
   header {
