@@ -29,7 +29,7 @@ export default {
 footer {
   background: #414141;
   padding: 60px 0 30px 0;
-  margin: auto;
+  margin: 100px auto auto auto;
   overflow: hidden;
 }
 
