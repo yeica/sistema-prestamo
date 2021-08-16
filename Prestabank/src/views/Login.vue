@@ -6,44 +6,34 @@
           <figure>
             <img src="../assets/img/signin-image.jpg" alt="sing up image" />
           </figure>
-          <a href="/signup" class="signup-image-link">Create an account</a>
         </div>
 
         <div class="signin-form">
-          <h2 class="form-title">Sign up</h2>
-          <form class="register-form" id="login-form">
+          <h2 class="form-title">Log in</h2>
+          <form class="register-form" id="login-form" @submit.prevent="onSubmit">
             <div class="form-group">
-              <label for="your_name"
+              <label for="email"
                 ><i class="zmdi zmdi-account material-icons-name"></i
               ></label>
               <input
-                type="text"
-                name="your_name"
-                id="your_name"
-                placeholder="Your Name"
+                v-model="email"
+                id="email"
+                type="email"
+                placeholder="Your email"
               />
             </div>
             <div class="form-group">
-              <label for="your_pass"><i class="zmdi zmdi-lock"></i></label>
+              <label for="password"><i class="zmdi zmdi-lock"></i></label>
               <input
+                v-model="password"
+                id="password"
                 type="password"
-                name="your_pass"
-                id="your_pass"
                 placeholder="Password"
-              />
-            </div>
-            <div class="form-group">
-              <input
-                type="checkbox"
-                name="remember-me"
-                id="remember-me"
-                class="agree-term"
               />
             </div>
             <div class="form-group form-button">
               <input
                 type="submit"
-                name="signin"
                 id="signin"
                 class="form-submit"
                 value="Log in"
@@ -56,12 +46,43 @@
   </section>
 </template>
 
-<script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
+<script lang="js">
 
-@Component({})
-export default class Login extends Vue {}
+import { Component, Vue } from "vue-property-decorator";
+import firebase from "firebase/app";
+import "firebase/auth";
+
+//@Component({})
+
+export default {
+  created() {
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        this.$router.replace({name: "Home"})
+      }
+    });
+  },
+  data() {
+      return {
+        email: '',
+        password: ''
+      }
+    },
+  methods: {
+    async onSubmit() {
+      try {
+        const val = await firebase.auth().signInWithEmailAndPassword(this.email, this.password);
+        this.$router.replace({name: "Home"})
+        console.log(val)
+      } catch (error) {
+        console.log(error)
+      }
+    }
+  }
+}
+  
 </script>
+
 <style scoped>
 /* @extend display-flex; */
 display-flex,

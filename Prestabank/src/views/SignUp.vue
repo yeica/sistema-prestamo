@@ -4,23 +4,12 @@
       <div class="signup-content">
         <div class="signup-form">
           <h2 class="form-title">Sign up</h2>
-          <form class="register-form">
-            <div class="form-group">
-              <label for="name"
-                ><i class="zmdi zmdi-account material-icons-name"></i
-              ></label>
-              <input
-                type="text"
-                name="name"
-                id="name"
-                placeholder="Your Name"
-              />
-            </div>
+          <form class="register-form" @submit.prevent="onSubmit">
             <div class="form-group">
               <label for="email"><i class="zmdi zmdi-email"></i></label>
               <input
+                v-model="email"
                 type="email"
-                name="email"
                 id="email"
                 placeholder="Your Email"
               />
@@ -28,8 +17,8 @@
             <div class="form-group">
               <label for="pass"><i class="zmdi zmdi-lock"></i></label>
               <input
+                v-model="password"
                 type="password"
-                name="pass"
                 id="pass"
                 placeholder="Password"
               />
@@ -39,18 +28,10 @@
                 ><i class="zmdi zmdi-lock-outline"></i
               ></label>
               <input
+                v-model="confirmPassword"
                 type="password"
-                name="re_pass"
                 id="re_pass"
                 placeholder="Repeat your password"
-              />
-            </div>
-            <div class="form-group">
-              <input
-                type="checkbox"
-                name="agree-term"
-                id="agree-term"
-                class="agree-term"
               />
             </div>
             <div class="form-group form-button">
@@ -61,6 +42,7 @@
                 value="Register"
               />
             </div>
+            <p class="error">{{error}}</p>
           </form>
         </div>
         <div class="signup-image">
@@ -74,13 +56,65 @@
   </section>
 </template>
 
-<script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
+<script lang="js">
 
-@Component({})
-export default class SingUp extends Vue {}
+import {Component, Vue} from "vue-property-decorator";
+import firebase from "firebase/app";
+import "firebase/auth";
+
+//@Component({})
+export default {
+  data() {
+    return {
+      email: '',
+      password: '',
+      confirmPassword: '',
+      error: ''
+    }
+  },
+  methods: {
+    async onSubmit() {
+      try {
+        if (this.validateForm()){
+          const user = await firebase.auth().createUserWithEmailAndPassword(this.email, this.password);
+          console.log(user);
+          this.$router.replace({name: "Home"})
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    },
+
+    //Validaciones del formulario
+    validateForm(){
+      if (this.password != this.confirmPassword){
+        this.error = "Passwords aren't the same."
+        return false
+      }
+      else if (this.password.length < 6){
+        this.error = "Password must contain more than 6 characters."
+        return false
+      }
+      else{
+        this.error = ''
+        return true
+      }
+    }
+  }
+}
+
 </script>
+
+
 <style scoped>
+
+/*  INPUT ERROR   */
+
+.error {
+  color: red;
+  font-weight: bold;
+}
+
 /* @extend display-flex; */
 display-flex, .display-flex, .display-flex-center, .signup-content, .signin-content, .social-login, .socials {
   display: flex;
